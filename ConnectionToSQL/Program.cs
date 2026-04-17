@@ -23,6 +23,30 @@ internal class Program
             }    
         }
         finally { connection.Close(); }
+
+        //create command with query
+        //execute nonquery
+        
+        try
+        {
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand(
+                "INSERT INTO products (id, name, price) VALUES (@id, @name, @price)" );
+
+            string id = Input("Kérem adjon meg egy ID-t: ");
+            command.Parameters.AddWithValue("@id", id);
+
+            string name = Input("Kérem adja meg a termék nevét: ");
+            command.Parameters.AddWithValue("@name", name);
+
+            double price;
+            while (!double.TryParse(Input("Kérem adja meg a termék árát: €"), out price))
+                Console.WriteLine("Számot adjon meg értéknek!");
+            command.Parameters.AddWithValue("@price", price);
+
+            command.ExecuteNonQuery();
+        }
+        finally { connection.Close(); }
     }
     private static MySqlConnection CreateConnection(string address,
                 string database, string user, string password = "")
@@ -34,6 +58,16 @@ internal class Program
     {
         MySqlCommand command = connection.CreateCommand(query);
         return command.ExecuteReader();
+    }
+    private int ExecuteNonQuery()
+    {
+
+        return 1;
+    }
+    private static string Input(string text)
+    {
+        Console.Write(text);
+        return Console.ReadLine();
     }
 }
 public static class MySqlExtends
