@@ -32,8 +32,7 @@ internal class Program
     }
     private static MySqlDataReader CreateReader(MySqlConnection connection, string query)
     {
-        MySqlCommand command = connection.CreateCommand();
-        command.CommandText = query;
+        MySqlCommand command = connection.CreateCommand(query);
         return command.ExecuteReader();
     }
 }
